@@ -1,6 +1,8 @@
 <?php
 namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @ORM\Entity(repositoryClass="Application\Entity\Repository\Bug")
  * @ORM\Table(name="bugs")
@@ -8,25 +10,73 @@ use Doctrine\ORM\Mapping as ORM;
 class Bug
 {
     /**
-     * @Id @Column(type="integer") @GeneratedValue
-     * @var int
-     */
+    * @ORM\Id
+    * @ORM\GeneratedValue(strategy="AUTO")
+    * @ORM\Column(type="integer")
+    */
     protected $id;
-    /**
-     * @Column(type="string")
-     * @var string
-     */
+    
+    /** @ORM\Column(type="string") */
     protected $description;
-    /**
-     * @Column(type="datetime")
-     * @var DateTime
-     */
+    
+    /** @ORM\Column(type="datetime") */
     protected $created;
-    /**
-     * @Column(type="string")
-     * @var string
-     */
+    
+    /** @ORM\Column(type="string") */
     protected $status;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Application\Entity\Product")
+     **/
+    protected $products = null;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Entity\User", inversedBy="assignedBugs")
+     **/
+    protected $engineer;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Entity\User", inversedBy="reportedBugs")
+     **/
+    protected $reporter;
+    
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+    
+    public function assignToProduct($product)
+    {
+        $this->products[] = $product;
+    }
+    
+    public function getProducts()
+    {
+        return $this->products;
+    }
+    
+    public function setEngineer($engineer)
+    {
+        $engineer->assignedToBug($this);
+        $this->engineer = $engineer;
+    }
+    
+    public function setReporter($reporter)
+    {
+        $reporter->addReportedBug($this);
+        $this->reporter = $reporter;
+    }
+    
+    public function getEngineer()
+    {
+        return $this->engineer;
+    }
+    
+    public function getReporter()
+    {
+        return $this->reporter;
+    }
+    
 
     public function getId()
     {
@@ -43,7 +93,7 @@ class Bug
         $this->description = $description;
     }
 
-    public function setCreated(DateTime $created)
+    public function setCreated(\DateTime $created)
     {
         $this->created = $created;
     }
