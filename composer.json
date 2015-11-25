@@ -14,6 +14,8 @@
         "doctrine/doctrine-orm-module": "^0.9.2",
         "bjyoungblood/bjy-authorize": "1.4.*",
         "cpigroup/php-amazon-mws": "^1.1",
-        "zendframework/zend-developer-tools": "dev-master"
+        "zendframework/zend-developer-tools": "dev-master",
+        "monolog/monolog": "^1.17",
+        "swiftmailer/swiftmailer": "^5.4"
     }
 }

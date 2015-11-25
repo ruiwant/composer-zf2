@@ -19,7 +19,7 @@ class User
     /** @ORM\Column(type="string") */
     protected $name;
     
-    /** @ORM\OneToMany(targetEntity="Application\Entity\Bug", mappedBy="reporter") */
+    /** @ORM\OneToMany(targetEntity="Application\Entity\Bug", mappedBy="reporter", cascade="REMOVE") */
     private $reportedBugs = null;
     
     /** @ORM\OneToMany(targetEntity="Application\Entity\Bug", mappedBy="engineer") */
